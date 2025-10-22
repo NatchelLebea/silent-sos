@@ -4,6 +4,7 @@ import 'history_page.dart';
 import 'trigger_settings_page.dart';
 import 'support_chat_page.dart';
 import 'safety_feature_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,22 +16,30 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
 
-  final List<Widget> pages = const [
-    ContactsPage(),
-    HistoryPage(),
-    TriggerSettingsPage(),
-    SupportChatPage(),
-    SafetyFeaturePage(),
-  ];
+  late final String userId;
+
+  @override
+  void initState() {
+    super.initState();
+    userId = FirebaseAuth.instance.currentUser?.uid ?? 'test_user_123';
+  }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = [
+      ContactsPage(userId: userId),
+      const HistoryPage(),
+      const TriggerSettingsPage(),
+      const SupportChatPage(),
+      const SafetyFeaturePage(),
+    ];
+
     return Scaffold(
       body: pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: (index) => setState(() => currentIndex = index),
-        selectedItemColor: Color(0xFF0EAD69),
+        selectedItemColor: const Color(0xFF0EAD69),
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
         items: const [

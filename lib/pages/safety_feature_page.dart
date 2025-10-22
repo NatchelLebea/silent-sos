@@ -1,7 +1,10 @@
-import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:geolocator/geolocator.dart';
+import 'package:telephony/telephony.dart';
+import 'package:http/http.dart' as http;
 
 class SafetyFeaturePage extends StatefulWidget {
   const SafetyFeaturePage({super.key});
@@ -14,31 +17,35 @@ class _SafetyFeaturePageState extends State<SafetyFeaturePage> {
   late stt.SpeechToText _speech;
   bool _isListening = false;
   String? _triggerWord;
+  String? _userId; // stored when logged in
+  final Telephony telephony = Telephony.instance;
+  final String baseUrl = 'http://172.20.10.4:8000/api/contacts';
 
   @override
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
-    _loadTriggerWord();
+    _loadTriggerWordAndUser();
   }
 
-  Future<void> _loadTriggerWord() async {
+  Future<void> _loadTriggerWordAndUser() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _triggerWord = prefs.getString('trigger_word');
+      _userId = prefs.getString('user_id'); // saved during login
     });
   }
 
   Future<void> _startListening() async {
     if (_triggerWord == null || _triggerWord!.isEmpty) {
-      _showDialog("Error", "No trigger word set. Please set it first.");
+      _showDialog("Ooops", "No trigger word set. Please set it first.");
       return;
     }
 
     bool available = await _speech.initialize(
       onStatus: (status) {
         if (status == "done" && _isListening) {
-          _restartListening(); // Keep listening continuously
+          _restartListening();
         }
       },
       onError: (error) {
@@ -52,17 +59,18 @@ class _SafetyFeaturePageState extends State<SafetyFeaturePage> {
       });
 
       _speech.listen(
-        onResult: (result) {
+        onResult: (result) async {
           String spoken = result.recognizedWords.trim().toLowerCase();
           if (spoken.contains(_triggerWord!.toLowerCase())) {
             _showDialog("SOS Triggered", "Your SOS trigger word was detected!");
-            _stopListening(); // Stop after detected once
+            await _sendSOSMessage();
+            _stopListening();
           }
         },
         listenMode: stt.ListenMode.confirmation,
       );
     } else {
-      _showDialog("Error", "Speech recognition not available.");
+      _showDialog("Speech recognition error", "Speech recognition not available.");
     }
   }
 
@@ -71,10 +79,11 @@ class _SafetyFeaturePageState extends State<SafetyFeaturePage> {
       _speech.stop();
       Future.delayed(const Duration(milliseconds: 500), () {
         _speech.listen(
-          onResult: (result) {
+          onResult: (result) async {
             String spoken = result.recognizedWords.trim().toLowerCase();
             if (spoken.contains(_triggerWord!.toLowerCase())) {
               _showDialog("SOS Triggered", "Your SOS trigger word was detected!");
+              await _sendSOSMessage();
               _stopListening();
             }
           },
@@ -89,6 +98,64 @@ class _SafetyFeaturePageState extends State<SafetyFeaturePage> {
     setState(() {
       _isListening = false;
     });
+  }
+
+  Future<void> _sendSOSMessage() async {
+    try {
+      if (_userId == null) {
+        debugPrint("User ID not found.");
+        return;
+      }
+
+      // 🔹 Get location
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        debugPrint("Location services disabled");
+        return;
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) return;
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      final locationUrl =
+          "https://www.google.com/maps?q=${position.latitude},${position.longitude}";
+
+      // 🔹 Fetch contacts from backend
+      final response = await http.get(Uri.parse('$baseUrl/$_userId/'));
+      if (response.statusCode != 200) {
+        debugPrint("Failed to fetch contacts: ${response.body}");
+        return;
+      }
+
+      final data = jsonDecode(response.body);
+      final List contacts = data['contacts'] ?? [];
+
+      if (contacts.isEmpty) {
+        debugPrint("No contacts found.");
+        return;
+      }
+
+      // 🔹 Compose message
+      final message =
+          "🚨 SOS! I need help! My location: $locationUrl";
+
+      // 🔹 Send SMS
+      for (var contact in contacts) {
+        String phone = contact['phone'] ?? '';
+        if (phone.isNotEmpty) {
+          await telephony.sendSms(to: phone, message: message);
+          debugPrint("SOS sent to $phone");
+        }
+      }
+    } catch (e) {
+      debugPrint("Error sending SOS: $e");
+    }
   }
 
   void _showDialog(String title, String message) {

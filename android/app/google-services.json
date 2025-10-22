@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "222544032929",
+    "project_id": "sillentsos",
+    "storage_bucket": "sillentsos.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222544032929:android:0ca94d7f1f277c69d8ace0",
+        "android_client_info": {
+          "package_name": "com.example.my_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxXsikzwwuUArGOltcELDuO3AfeSpgFc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

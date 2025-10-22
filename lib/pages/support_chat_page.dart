@@ -50,7 +50,7 @@ class _SupportChatPageState extends State<SupportChatPage> {
 
     try {
      final response = await http.post(
-     Uri.parse('http://192.168.124.104:5005/webhooks/rest/webhook'),
+     Uri.parse('http://192.168.124.104:5005/webhooks/rest/webhook'), 
     headers: {'Content-Type': 'application/json'},
     body: json.encode({'sender': 'user123', 'message': text}),
     );
@@ -64,7 +64,7 @@ class _SupportChatPageState extends State<SupportChatPage> {
           }
         } else {
           setState(() {
-            messages.add({'text': 'No response from bot.', 'isUser': false, 'initial': 'BOT'});
+            messages.add({'text': 'Ask gender-based questions or enquries.', 'isUser': false, 'initial': 'BOT'});
           });
         }
       } else {

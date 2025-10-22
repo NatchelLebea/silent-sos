@@ -52,7 +52,6 @@ class _TriggerSettingsPageState extends State<TriggerSettingsPage> {
       },
     );
 
-    // Stop after 2 seconds
     Timer(const Duration(seconds: 2), () {
       _stopRecording();
     });
@@ -132,7 +131,6 @@ class _TriggerSettingsPageState extends State<TriggerSettingsPage> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          // Header
           Container(
             width: double.infinity,
             height: 160,
@@ -154,7 +152,6 @@ class _TriggerSettingsPageState extends State<TriggerSettingsPage> {
             ),
           ),
 
-          // Card with recording button
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: Card(
