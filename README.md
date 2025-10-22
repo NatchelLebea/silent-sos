@@ -90,6 +90,8 @@ flutter run
 
 # Django Backend
 
+https://github.com/NatchelLebea/silent_sos_backend
+
 ```bash
 cd backend
 python -m venv env
@@ -99,6 +101,8 @@ python manage.py runserver 0.0.0.0:8000
 ```
 
 # Rasa Chatbot
+
+https://github.com/NatchelLebea/silent_sos_rasabot
 
 ```bash
 cd rasa_bot
