@@ -133,7 +133,7 @@ In `AndroidManifest.xml`:
 
 ---
 
-#Future Improvements
+# Future Improvements
 
 Offline Mode – Work without internet for faster emergency response.
 Gesture & Button Triggers– SOS via handshakes or volume buttons.
