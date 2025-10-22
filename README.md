@@ -132,5 +132,3 @@ To developers using tech to protect and heal — keep building.
 ---
 
 
-  That’ll make your GitHub page look **professional and portfolio-ready**.
-
