@@ -51,6 +51,8 @@ Rasa Chatbot Integration – A compassionate AI companion trained to:
 | Storage            | Shared Preferences + Firestore |
 
 ---
+# Screenshots Of the App
+
 # Login and Register
 ![1000000130](https://github.com/user-attachments/assets/fe2daad2-6cd6-460a-b1ab-afdcfa7bd785)
 ![1000000131](https://github.com/user-attachments/assets/74eb3f6d-4d9d-4fa2-a101-ad84c1a00bb2)
