@@ -60,8 +60,11 @@ Rasa Chatbot Integration – A compassionate AI companion trained to:
 ![1000000133](https://github.com/user-attachments/assets/62058ca3-7cb2-4699-99dc-72b8c346951a)
 ![1000000135](https://github.com/user-attachments/assets/8570d29c-bcf6-42e8-9f45-19ede0cc4079)
 ![1000000137](https://github.com/user-attachments/assets/bf3f4baf-3625-4407-8bbd-9b64c8f91e9a)
-![1000000144](https://gith![1000000143](https://github.com/user-attachments/assets/991f59e4-7ecd-4632-a7a3-a974ff0ff2a0)
-ub.com/user-attachments/assets/e9b6e444-7130-40c5-95d5-fc8619b410b3)
+![1000000![1000000143](https://github.com/user-attachments/assets/8b576c1c-7381-45aa-96e9-5d7cbe9e3194)
+144](https://github.com/user-attachments/assets/6389d8c3-fc05-4b90-b9e9-30b259ff3940)
+
+# Trigger Settings
+
 
 # Installation
 
