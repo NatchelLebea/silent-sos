@@ -17,7 +17,7 @@ class _SafetyFeaturePageState extends State<SafetyFeaturePage> {
   late stt.SpeechToText _speech;
   bool _isListening = false;
   String? _triggerWord;
-  String? _userId; // stored when logged in
+  String? _userId; 
   final Telephony telephony = Telephony.instance;
   final String baseUrl = 'http://172.20.10.4:8000/api/contacts';
 
@@ -32,7 +32,7 @@ class _SafetyFeaturePageState extends State<SafetyFeaturePage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _triggerWord = prefs.getString('trigger_word');
-      _userId = prefs.getString('user_id'); // saved during login
+      _userId = prefs.getString('user_id'); 
     });
   }
 
@@ -107,7 +107,7 @@ class _SafetyFeaturePageState extends State<SafetyFeaturePage> {
         return;
       }
 
-      // 🔹 Get location
+      
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         debugPrint("Location services disabled");
@@ -141,11 +141,10 @@ class _SafetyFeaturePageState extends State<SafetyFeaturePage> {
         return;
       }
 
-      // 🔹 Compose message
+     
       final message =
-          "🚨 SOS! I need help! My location: $locationUrl";
+          " SOS! I need help! My location: $locationUrl";
 
-      // 🔹 Send SMS
       for (var contact in contacts) {
         String phone = contact['phone'] ?? '';
         if (phone.isNotEmpty) {

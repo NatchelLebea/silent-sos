@@ -34,7 +34,7 @@ dependencies:
   permission_handler: ^11.3.0
   firebase_core: ^3.15.2
   firebase_auth: ^5.7.0
-  telephony_sdt: ^0.2.0
+  telephony_sdt: ^0.3.0
   cupertino_icons: ^1.0.8
 
   
